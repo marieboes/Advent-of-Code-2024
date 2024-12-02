@@ -1001,7 +1001,7 @@ input_data = """
 55820   53096
 """
 
-# Split the input data into lines and then into two separate lists
+# Split into lines & into two lists
 lines = input_data.strip().split('\n')
 listA, listB = [], []
 
@@ -1010,18 +1010,17 @@ for line in lines:
     listA.append(num1)
     listB.append(num2)
 
-# Sort both lists
+# Sort
 listA.sort()
 listB.sort()
 
-# Calculate how many times each number from list A appears in list B, results in list C
+# How many times A in B -> new list C
 listC = [listB.count(num) for num in listA]
 
-# Calculate product of corresponding elements from list A and list C into list D
+# A * C -> D
 listD = [a * c for a, c in zip(listA, listC)]
 
-# Sum the list D
+# Sum list D
 sum_D = sum(listD)
 
-# Print the sum
 print(sum_D)
