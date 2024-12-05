@@ -1,10 +1,9 @@
 def count_xmas_occurrences(grid):
-   # Defines the word we're searching for
-   target = "MAS"
+   target = "XMAS"
    target_length = len(target)
 
 
-   # Get the dimensions of the grid
+   # Dimensions grid
    rows = len(grid)
    cols = len(grid[0]) if rows > 0 else 0
 
@@ -16,9 +15,9 @@ def count_xmas_occurrences(grid):
    def search_in_direction(x, y, dx, dy):
        count = 0
        for i in range(target_length):
-           if not in_bounds(x, y):  # Check bounds for grid
+           if not in_bounds(x, y):
                return 0
-           if grid[x][y] != target[i]:  # Check if the character matches
+           if grid[x][y] != target[i]:
                return 0
            x += dx
            y += dy
@@ -28,19 +27,18 @@ def count_xmas_occurrences(grid):
    total_count = 0
 
 
-   # Check all positions in the grid
+   # Check positions
    for r in range(rows):
        for c in range(cols):
-           # Check horizontal right, vertical down, diagonal \ (bottom right), diagonal / (bottom left)
-           total_count += search_in_direction(r, c, 0, 1)  # Horizontal right
-           total_count += search_in_direction(r, c, 1, 0)  # Vertical down
-           total_count += search_in_direction(r, c, 1, 1)  # Diagonal \
-           total_count += search_in_direction(r, c, 1, -1)  # Diagonal /
-           # Check reverse directions
-           total_count += search_in_direction(r, c, 0, -1)  # Horizontal left
-           total_count += search_in_direction(r, c, -1, 0)  # Vertical up
-           total_count += search_in_direction(r, c, -1, -1)  # Diagonal \
-           total_count += search_in_direction(r, c, -1, 1)  # Diagonal /
+           total_count += search_in_direction(r, c, 0, 1)
+           total_count += search_in_direction(r, c, 1, 0)
+           total_count += search_in_direction(r, c, 1, 1)
+           total_count += search_in_direction(r, c, 1, -1)
+           # Reverse directions
+           total_count += search_in_direction(r, c, 0, -1)
+           total_count += search_in_direction(r, c, -1, 0)
+           total_count += search_in_direction(r, c, -1, -1)
+           total_count += search_in_direction(r, c, -1, 1)
 
 
    return total_count
@@ -49,7 +47,6 @@ def count_xmas_occurrences(grid):
 
 
 if __name__ == "__main__":
-   # Input grid as plain text in multiple lines
    input_data = """
 SAMXMAXXAMAMSSSSSMXMAXXMSMMMMASAMXSAMXAMMSMXSAMXSSSSMMMAMXMMMMMSMSMSMMSXXASMXSMSMAAXSSXMXMAMASASAAXXSAMXXMASXMXAMXSSMMSAMXXMXXMAMXMSSSMXXSAS
 XMASMSSSXSAXXAXAAXXMAMSASAAMSAXASAMXMMSMAXMAMXMMMMMAASMSSXMASMAMMAAMMASXMMXMASAMMAMXAMXMAXSSXSAMXAASAMXXXMASMASMXMXMAAMSXMMSMMMSAMXAAAXXMXMM
@@ -193,11 +190,10 @@ SASAMXAAXXAAAAMMMSAMXMAAAAAMMMSMAAXASXSAMASXMAAAAASMSAMAAAXAMXMXXMMMMMSMMSMAMMAM
 SMMSSMSSSSSMSSXSAMXSSMAMSMSMXMAXSSMXSMSXMMAMSMSSMXSAMXSAASXMASMXAXSAMXXXAXMAMMASXMXSASMXMSXXMAXMSMSSMMSAMSXMASXAMMXMASXSMSMSSSMMXMAMSMMAAMMS    """.strip().splitlines()
 
 
-   # Strip any trailing spaces from each line
+   # Strip data
    input_data = [line.strip() for line in input_data]
 
 
-   # Calculate occurrences of "xmas"
    result = count_xmas_occurrences(input_data)
    print(f"Total occurrences of 'xmas': {result}")
 

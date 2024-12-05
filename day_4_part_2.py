@@ -1,16 +1,9 @@
-
-
-
-
-
-
-
 def count_intersecting_mas(grid):
    patterns = ["MAS", "SAM"]
    target_length = len(patterns[0])
 
 
-   # Get the dimensions of the grid
+   # Dimensions of grid
    rows = len(grid)
    cols = len(grid[0]) if rows > 0 else 0
 
@@ -20,30 +13,30 @@ def count_intersecting_mas(grid):
 
 
    def find_patterns(x, y, dx, dy, pattern):
-       """Check if pattern forms starting from (x, y) in direction (dx, dy)"""
+       #Check if pattern starts from (x, y) in direction (dx, dy)
        for i in range(target_length):
            if not in_bounds(x + i * dx, y + i * dy) or grid[x + i * dx][y + i * dy] != pattern[i]:
                return False
        return True
 
 
-   # Store positions of 'A' for each direction pattern found
-   positions_first_direction = set()  # For `/` direction
-   positions_opposite_direction = set()  # For `\` direction
+   # Positions of 'A'
+   positions_first_direction = set()
+   positions_opposite_direction = set()
 
 
-   # Iterate over the grid to find all patterns in / direction
+   # Iterate
    for r in range(rows):
        for c in range(cols):
            for pattern in patterns:
                # Check for / (slash)
                if find_patterns(r, c, 1, -1, pattern):
-                   positions_first_direction.add((r + 1, c - 1))  # 'A' position
+                   positions_first_direction.add((r + 1, c - 1))  # A position
 
 
                # Check for \ (backslash)
                if find_patterns(r, c, 1, 1, pattern):
-                   positions_opposite_direction.add((r + 1, c + 1))  # 'A' position
+                   positions_opposite_direction.add((r + 1, c + 1))  # A position
 
 
    # Calculate intersections
@@ -56,7 +49,6 @@ def count_intersecting_mas(grid):
 
 
 if __name__ == "__main__":
-   # Input grid as plain text in multiple lines
    input_data = """
 SAMXMAXXAMAMSSSSSMXMAXXMSMMMMASAMXSAMXAMMSMXSAMXSSSSMMMAMXMMMMMSMSMSMMSXXASMXSMSMAAXSSXMXMAMASASAAXXSAMXXMASXMXAMXSSMMSAMXXMXXMAMXMSSSMXXSAS
 XMASMSSSXSAXXAXAAXXMAMSASAAMSAXASAMXMMSMAXMAMXMMMMMAASMSSXMASMAMMAAMMASXMMXMASAMMAMXAMXMAXSSXSAMXAASAMXXXMASMASMXMXMAAMSXMMSMMMSAMXAAAXXMXMM
@@ -200,10 +192,9 @@ SASAMXAAXXAAAAMMMSAMXMAAAAAMMMSMAAXASXSAMASXMAAAAASMSAMAAAXAMXMXXMMMMMSMMSMAMMAM
 SMMSSMSSSSSMSSXSAMXSSMAMSMSMXMAXSSMXSMSXMMAMSMSSMXSAMXSAASXMASMXAXSAMXXXAXMAMMASXMXSASMXMSXXMAXMSMSSMMSAMSXMASXAMMXMASXSMSMSSSMMXMAMSMMAAMMS    """.strip().splitlines()
 
 
-   # Strip any trailing spaces from each line
+   # Strip data
    input_data = [line.strip() for line in input_data]
 
 
-   # Calculate occurrences of intersecting 'MAS' patterns
    result = count_intersecting_mas(input_data)
    print(f"Total intersecting diagonal occurrences of 'MAS': {result}")
