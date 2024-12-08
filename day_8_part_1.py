@@ -2,7 +2,6 @@ def parse_input(input_string):
     return [list(line) for line in input_string.strip().split('\n')]
 
 def find_locations(grid):
-    # Dictionary to store found locations for each character
     locations = {}
 
     for row_idx, row in enumerate(grid):
@@ -18,13 +17,12 @@ def calculate_distances(locations):
     distances = {}
 
     for char, loc_list in locations.items():
-        if len(loc_list) > 1:  # We only care about characters that appear more than once
+        if len(loc_list) > 1:
             distances[char] = []
             for i in range(len(loc_list)):
                 for j in range(i + 1, len(loc_list)):
                     location_a = loc_list[i]
                     location_b = loc_list[j]
-                    # Calculate distance in terms of steps down and steps right
                     down_steps = location_b[0] - location_a[0]
                     right_steps = location_b[1] - location_a[1]
                     distances[char].append((location_a, location_b, (down_steps, right_steps)))
@@ -34,19 +32,15 @@ def calculate_distances(locations):
 def modify_grid_with_hashes(grid, distances):
     for distance_list in distances.values():
         for (loc_a, loc_b, (down, right)) in distance_list:
-            # Calculate negative and positive positions
             negative_pos = (loc_a[0] - down, loc_a[1] - right)
             positive_pos = (loc_b[0] + down, loc_b[1] + right)
 
-            # Mark '#' on negative step position if within grid
             if 0 <= negative_pos[0] < len(grid) and 0 <= negative_pos[1] < len(grid[0]):
                 grid[negative_pos[0]][negative_pos[1]] = '#'
 
-            # Mark '#' on positive step position if within grid
             if 0 <= positive_pos[0] < len(grid) and 0 <= positive_pos[1] < len(grid[0]):
                 grid[positive_pos[0]][positive_pos[1]] = '#'
 
-    # Count unique '#' hashes from the modified grid
     num_hashes_added = sum(row.count('#') for row in grid)
     return num_hashes_added, grid
 
@@ -59,14 +53,11 @@ def main(input_string):
     character_locations = find_locations(grid)
     character_distances = calculate_distances(character_locations)
 
-    # Modify grid and count hashes added
     num_hashes_added, modified_grid = modify_grid_with_hashes(grid, character_distances)
 
-    # Print the modified grid
     print("Modified Grid:")
     print_grid(modified_grid)
 
-    # Output number of unique '#' characters added
     print(f"Number of unique '#' placements: {num_hashes_added}")
 input_string = """
 ...s..............................................

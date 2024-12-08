@@ -32,7 +32,6 @@ def add_hashes(grid, start_pos, steps, direction_multiplier):
     next_pos = (start_pos[0] + direction_multiplier * steps[0],
                 start_pos[1] + direction_multiplier * steps[1])
 
-    # Adjust initial position considering direction
     next_pos = (next_pos[0] + direction_multiplier * steps[0],
                 next_pos[1] + direction_multiplier * steps[1])
 
@@ -41,7 +40,6 @@ def add_hashes(grid, start_pos, steps, direction_multiplier):
             grid[next_pos[0]][next_pos[1]] = '#'
             count_hashes += 1
         else:
-            # Count the position even if it's occupied
             count_hashes += 1
         next_pos = (next_pos[0] + direction_multiplier * steps[0],
                     next_pos[1] + direction_multiplier * steps[1])
@@ -55,7 +53,6 @@ def overlay_hashes_on_grid(grid, distances):
     for char, distance_list in distances.items():
         print(f"Character {char}:")
         for (loc_a, loc_b, (down, right)) in distance_list:
-            # It should be only `+1` since we count potential hashes
             duo_hash_count = (add_hashes(display_grid, loc_a, (down, right), 1) +
                               add_hashes(display_grid, loc_b, (down, right), -1))
             total_possible_hashes += duo_hash_count
@@ -112,7 +109,6 @@ def count_positions_in_multiple_duos(duos):
             print(f"  Position {loc} appears in {count} duos.")
             count_more_than_one += 1
 
-    # Return the locations for X placement in the grid
     return count_more_than_one, [loc for loc, count in position_count.items() if count > 1]
 
 
@@ -143,7 +139,6 @@ def main(input_string):
     print("\nFinal modified grid:")
     print_grid(display_grid)
 
-# Example run with input string
 input_string = """
 ...s..............................................
 ...................w......K.......t...............
