@@ -46,6 +46,22 @@ def add_hashes(grid, start_pos, steps, direction_multiplier):
 
     return count_hashes
 
+
+def add_hash_between_duo(grid, loc_a, loc_b):
+    # Calculate the differences in row and column
+    dx = loc_b[0] - loc_a[0]
+    dy = loc_b[1] - loc_a[1]
+
+    # Check that both coordinates are divisible by 3 to be in line at 1:2
+    if (dx % 3 == 0) and (dy % 3 == 0):
+        # Calculate the 1:2 point
+        point_1 = (loc_a[0] + dx // 3, loc_a[1] + dy // 3)
+
+        # Ensure point_1 is within bounds and on a line with loc_a and loc_b
+        if 0 <= point_1[0] < len(grid) and 0 <= point_1[1] < len(grid[0]):
+            grid[point_1[0]][point_1[1]] = '#'
+
+
 def overlay_hashes_on_grid(grid, distances):
     display_grid = [row[:] for row in grid]
     total_possible_hashes = 0
@@ -53,12 +69,17 @@ def overlay_hashes_on_grid(grid, distances):
     for char, distance_list in distances.items():
         print(f"Character {char}:")
         for (loc_a, loc_b, (down, right)) in distance_list:
+            # Add # between the duo in a straight line (vertically, horizontally, diagonally)
+            add_hash_between_duo(display_grid, loc_a, loc_b)
+
+            # Add '#' outside the character duo
             duo_hash_count = (add_hashes(display_grid, loc_a, (down, right), 1) +
                               add_hashes(display_grid, loc_b, (down, right), -1))
             total_possible_hashes += duo_hash_count
             print(f"  Pair {loc_a} to {loc_b} can add {duo_hash_count} '#'")
 
     return display_grid, total_possible_hashes
+
 
 def is_line_clear(grid, start, end):
     dx = end[0] - start[0]
