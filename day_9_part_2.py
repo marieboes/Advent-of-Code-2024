@@ -5,6 +5,7 @@ def transform_numbers(numbers):
     transformed_list = []
     odd_index = 0
 
+    # Convert numbers into the initial pattern
     for index, num in enumerate(numbers):
         if index % 2 == 0:
             transformed_list.append(str(odd_index) * num)
@@ -16,31 +17,38 @@ def transform_numbers(numbers):
     print(f"Initial transformed string: {transformed_str}")
 
     transformed_chars = list(transformed_str)
+    length = len(transformed_chars)
 
+    # Process numbers from 9 to 0 and move them to match with dots on the left
     for current_number in range(9, -1, -1):
         current_char = str(current_number)
         i = 0
 
-        while i < len(transformed_chars):
+        while i < length:
             if transformed_chars[i] == current_char:
+                # Locate the end of current character sequence
                 j = i
-                while j < len(transformed_chars) and transformed_chars[j] == current_char:
+                while j < length and transformed_chars[j] == current_char:
                     j += 1
 
                 number_length = j - i
 
-                for k in range(len(transformed_chars)):
+                # Optimize dot sequence search
+                k = 0
+                while k < i:
                     if transformed_chars[k] == '.':
-                        l = k
-                        while l < len(transformed_chars) and transformed_chars[l] == '.':
-                            l += 1
-
-                        dot_length = l - k
-
-                        if number_length == dot_length:
-                            transformed_chars[k:k+number_length] = [current_char] * number_length
+                        # Check if we have a dot sequence of the same length
+                        end_k = k + number_length
+                        if transformed_chars[k:end_k] == ['.'] * number_length:
+                            # Move the number sequence to the left
+                            transformed_chars[k:end_k] = [current_char] * number_length
                             transformed_chars[i:j] = ['.'] * number_length
+
+                            print(
+                                f"After moving '{current_char}' from [{i} to {j}) to [{k} to {end_k}): {''.join(transformed_chars)}")
                             break
+
+                    k += 1
 
                 i = j
             else:
@@ -49,8 +57,9 @@ def transform_numbers(numbers):
     final_result_str = ''.join(transformed_chars)
     print(f"Final transformed sequence: {final_result_str}")
 
-    final_numbers_list = [int(char) for char in final_result_str if char.isdigit()]
-    total_sum = sum(num * index for index, num in enumerate(final_numbers_list))
+    # Calculate checksum: number multiplied by its position
+    total_sum = sum(int(char) * index for index, char in enumerate(final_result_str) if char.isdigit())
+
     print(f"Total sum: {total_sum}")
 
     return total_sum
