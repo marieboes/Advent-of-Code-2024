@@ -73,7 +73,7 @@ def transform_numbers(numbers):
     return total_sum
 
 
-input_text = "2333133121414131402"
+input_text = "234567874874903342482349"
 parsed_numbers = parse_to_list_of_numbers(input_text)
 final_sum = transform_numbers(parsed_numbers)
 print(final_sum)
