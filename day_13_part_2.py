@@ -1,54 +1,39 @@
 import re
 import numpy as np
 
-def parse_input(input_str):
-    task_pattern = r"Button A: X\+(\d+), Y\+(\d+)\s*Button B: X\+(\d+), Y\+(\d+)\s*Prize: X=(\d+), Y=(\d+)"
-    matches = re.findall(task_pattern, input_str)
-    tasks = [
-        (
-            (int(a_x), int(a_y)),
-            (int(b_x), int(b_y)),
-            (int(prize_x) + 10000000000000, int(prize_y) + 10000000000000)
-        )
-        for a_x, a_y, b_x, b_y, prize_x, prize_y in matches
-    ]
-    return tasks
 
 def parse_input(input_str):
     task_pattern = r"Button A: X\+(\d+), Y\+(\d+)\s*Button B: X\+(\d+), Y\+(\d+)\s*Prize: X=(\d+), Y=(\d+)"
     matches = re.findall(task_pattern, input_str)
     tasks = [
-        ((int(a_x), int(a_y)), (int(b_x), int(b_y)), (int(prize_x) + 10000000000000, int(prize_y) + 10000000000000))
+        ((int(a_x), int(a_y)), (int(b_x), int(b_y)), (int(prize_x), int(prize_y)))
         for a_x, a_y, b_x, b_y, prize_x, prize_y in matches
     ]
     return tasks
+
 
 def calculate_button_presses(button_a, button_b, target):
     button_a_x, button_a_y = button_a
     button_b_x, button_b_y = button_b
     target_x, target_y = target
 
-    max_a_presses = target_x // button_a_x
-    optimal_a_presses = None
-    optimal_b_presses = None
+    max_b_presses = min(target_x // button_b_x, target_y // button_b_y)
 
-    for a_presses in range(max_a_presses + 1):
-        remaining_x = target_x - a_presses * button_a_x
-        remaining_y = target_y - a_presses * button_a_y
+    for b_presses in range(max_b_presses, -1, -1):
+        remaining_x = target_x - b_presses * button_b_x
+        remaining_y = target_y - b_presses * button_b_y
 
-        if remaining_x % button_b_x == 0 and remaining_y % button_b_y == 0:
-            b_presses_x = remaining_x / button_b_x
-            b_presses_y = remaining_y / button_b_y
+        if remaining_x < 0 or remaining_y < 0:
+            continue
 
-            if b_presses_x == b_presses_y and b_presses_x >= 0:
-                if optimal_a_presses is None or a_presses < optimal_a_presses:
-                    optimal_a_presses = a_presses
-                    optimal_b_presses = int(b_presses_x)
+        if (remaining_x % button_a_x == 0) and (remaining_y % button_a_y == 0):
+            a_presses_x = remaining_x // button_a_x
+            a_presses_y = remaining_y // button_a_y
 
-    if optimal_a_presses is not None:
-        return optimal_a_presses, optimal_b_presses
-    else:
-        return None
+            if a_presses_x == a_presses_y:
+                return a_presses_x, b_presses
+
+    return None
 
 
 def process_input(input_str):
@@ -70,11 +55,16 @@ def process_input(input_str):
     results.append(f"Total Weighted Sum: {total_weighted_sum}.")
     return results
 
+
+# Input string in the specified format
 input_string = """
 Button A: X+49, Y+27
 Button B: X+35, Y+65
 Prize: X=4326, Y=4898
 
+Button A: X+82, Y+64
+Button B: X+20, Y+67
+Prize: X=6818, Y=10409
 """
 
 results = process_input(input_string)
